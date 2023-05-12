@@ -17,31 +17,3 @@ To detect people, we use computer vision algorithms that determine the contours 
 ### Fight detection
 
 When the drone detects a group of people who may be involved in a fight, it approaches that area and uses computer vision algorithms to determine if a fight is taking place there. To do this, we use algorithms that determine movement patterns and brutality.
-
-## Software Requirements
-
-- Python 3.x
-- Libraries for computer vision: OpenCV, NumPy, SciPy
-- Libraries for training neural networks: TensorFlow, Keras
-
-## Installation and use
-
-1. Clone this repository to your computer
-2. Install all necessary libraries using pip
-3. Launch the drone and the software on the computer connected to the drone
-4. Run the script `detect_fights.py `to start searching for fights
-
-## Contribution to the project
-We welcome any contribution to this project. If you have any ideas or suggestions to improve the detection of fights, please create a branch and send a request for influence. We also welcome bug fixes and code improvements.
-
-## License
-
-This project is distributed under the MIT license. We make sure that all libraries and frameworks used in the project are also distributed under their respective licenses.
-
-## Assistance
-
-We thank you for using our software. If you have any questions or problems with using the drone and the software, please create a new task in the Issues section of our repository on GitHub.
-
-With respect,
-
-[Name of the Project manager]
