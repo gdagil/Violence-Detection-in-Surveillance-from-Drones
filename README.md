@@ -1,19 +1,50 @@
-# Violence Detection in Surveillance from Drones
+# Обнаружение насилия при наблюдении с помощью беспилотных летательных аппаратов
 
-This project is designed to use a drone with a set of sensors to detect fights within a certain territory. To detect fights, the drone uses a camera and computer vision algorithms that work in two stages.
+Этот проект предназначен для использования беспилотника с набором датчиков для обнаружения боев на определенной территории. Для обнаружения драк беспилотник использует камеру и алгоритмы компьютерного зрения, которые работают в два этапа.
 
-## Task Description
+## Описание задачи
 
-The drone must fly along the perimeter of the territory and detect people who may be involved in a fight. The drone must then approach the intended area of the fight to make sure that a fight is actually taking place. If a fight is detected, the drone must report it.
+Беспилотник должен пролететь по периметру территории и обнаружить людей, которые могут быть вовлечены в драку. 
 
-## Solution architecture
+## Архитектура решения
 
-This project consists of two main parts: an algorithm for detecting people and an algorithm for detecting fights.
+Решение основаннно на репозитории [pyskl](https://github.com/kennymckormick/pyskl) и состоит из нескольких ступеней. Сначала мы детектируем людей. Получив ббоксы нам необходимо найти позы людей на каждом кадре. Для этого строим скелет. Теперь используя скелеты на вход классификатора скелеты с нескольких кадров на выходе мы получаем является ли это действие насильственным.
 
-### Detecting people
+![arch](images/arch.png)
 
-To detect people, we use computer vision algorithms that determine the contours of people in images taken from the drone's camera. We also use neural networks to recognize movement patterns that may indicate that a group of people is involved in a fight.
+Сам классификатор на базе скелетов может быть построен множеством способов. В нашей работе мы за основу взяли HRNET.
 
-### Fight detection
+![hrnet](images/hrnet.png)
 
-When the drone detects a group of people who may be involved in a fight, it approaches that area and uses computer vision algorithms to determine if a fight is taking place there. To do this, we use algorithms that determine movement patterns and brutality.
+Плюсом данной архитектуры является то, что она не так сильно зависима от положения камеры в кадре и окружения вокруг. Так как вся работа с самим изображением заканчивается на этапе построения скелетов.
+
+За счет этой особенности для обучения классификатора можно использовать как реальные данные, так и синтетически сгенерированные, при условии, что мы сможем построить по ним скелеты.
+
+Для дообучения был взят датасет [RROSE NTU CCTV-Fights Dataset](https://rose1.ntu.edu.sg/dataset/cctvFights/download)
+
+
+## Альтернативные рассмотренные решения
+
+### CNN+RNN
+
+Эта архитектура является одной из самых популярных подходов к решению данной проблемы, что является плюсом, так как существует множество примеров и датасетов, но все они для статичной камеры. Для дронов же датасетов мизерное количество, что приводит к проблеме их нехватки.
+
+Так как в этой архитектуре мы обрабатываем само изображение нам нужем большой датасетс аугментациями при тренировке.
+
+### [Violence-Detection-With-Human-Skeletons](https://github.com/atmguille/Violence-Detection-With-Human-Skeletons/tree/main)
+
+Является нечто средним между первыми двумя решениями. Входное избображения преобразовывается в два других. Первое это отресованные скелеты без заднего фона. Второе это разница соседних кадров. Эти изображения пропускаются через сверточные слои и конкатинируются. Далее решение похоже на CNN+RNN. Из плюсов этого решения в сравнении с CNN+RNN можно выделить большую точность. Тем не менее проблемы все теже, небходим большой размеченный датасет с дрона.
+
+![hrnet](images/architecture.png)
+
+## Ссылки на источники
+
+```
+@inproceedings{duan2022pyskl,
+  title={Pyskl: Towards good practices for skeleton action recognition},
+  author={Duan, Haodong and Wang, Jiaqi and Chen, Kai and Lin, Dahua},
+  booktitle={Proceedings of the 30th ACM International Conference on Multimedia},
+  pages={7351--7354},
+  year={2022}
+}
+```
